@@ -25,13 +25,8 @@ The project is structured around **5 key tables** with proper indexing to improv
 | **sales**     | `sale_id`     | `store_id`, `product_id` | `sale_date`, `store_id`, `product_id` |
 | **warranty**  | `claim_id`    | `sale_id`        | `sale_id`, `claim_date`      |
 
-✅ **Indexing for Query Optimization**
-```sql
-CREATE INDEX idx_sales_date ON sales(sale_date);
-CREATE INDEX idx_sales_store_product ON sales(store_id, product_id);
-CREATE INDEX idx_warranty_claim_date ON warranty(claim_date);
-CREATE INDEX idx_products_launch ON products(launch_date);
-```
+---
+
 # 📊 Business Problems & Solutions  
 This project tackles **23 key business problems**, ranging from **simple counts and aggregations** to **advanced correlation analysis and time-based comparisons**.
 
@@ -91,7 +86,7 @@ This project tackles **23 key business problems**, ranging from **simple counts 
 # 🚀 **SQL Query Optimization & Performance Tuning**  
 
 ## ✅ **Optimization by Query Refactoring**
-**Before Optimization:**  
+### **Before Optimization:**  
 - **Used multiple CTEs**, resulting in **redundant table scans** and **longer execution time (688ms).**
 ```sql
 WITH paid_repair AS (
@@ -114,7 +109,7 @@ SELECT tr.store_name, pr.total_paid_repaired, tr.total_claims,
 FROM paid_repair pr
 JOIN total_repair tr ON pr.store_name = tr.store_name; 
 ```
-**Optimized Approach:**  
+### **Optimized Approach:**  
 - **Merged CTEs** into a **single query**, eliminating redundant scans, improving performance by **54% (316ms).**  
 ```sql
 WITH repair_count AS (
