@@ -186,7 +186,7 @@ git clone https://github.com/yourusername/apple-retail-sales-sql.git
 💡 **If you find this useful, star ⭐ this repo!**  
 
 🔗 **LinkedIn:** [https://www.linkedin.com/in/nirmalkumartk/]  
-🔗 **GitHub:** [Your GitHub Profile]  
+🔗 **GitHub:** [https://github.com/NirmalKumar31]  
 
 
 
