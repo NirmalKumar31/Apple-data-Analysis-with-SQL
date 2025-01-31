@@ -1,7 +1,7 @@
-# **📊 Apple Retail Sales Analytics – SQL Performance Optimization in PostgreSQL** 🚀
+# **📊 Apple Retail Sales Analytics – Scaling SQL Performance on 1M+ Transactions in PostgreSQL** 🚀
 
-## 📅 Date: [Month, Year]  
-👤 **Author:** [Your Name]  
+## 📅 Date: January, 2025  
+👤 **Author:** Nirmalkumar Thirupallikrishnan Kesavan  
 🛠️ **Tech Stack:** PostgreSQL, SQL Query Optimization, Window Functions, CTEs, Indexing, Performance Tuning  
 
 ---
@@ -14,7 +14,7 @@ The dataset consists of **Apple store sales, products, warranties, and store loc
 
 ---
 
-## **🗂 Database Schema & Indexing Strategy**  
+## **🗂 Database Schema **  
 The project is structured around **5 key tables** with proper indexing to improve query performance:
 
 | Table     | Primary Key (PK) | Foreign Keys (FK) | Indexed Columns               |
@@ -30,7 +30,7 @@ The project is structured around **5 key tables** with proper indexing to improv
 # 📊 Business Problems & Solutions  
 This project tackles **23 key business problems**, ranging from **simple counts and aggregations** to **advanced correlation analysis and time-based comparisons**.
 
-## 🟢 Easy to Medium (10 Questions)
+## 🟢 Easy to Medium 
 1. Find the number of stores in each country.  
 2. Calculate the total number of units sold by each store.  
 3. Identify how many sales occurred in December 2023.  
@@ -44,7 +44,7 @@ This project tackles **23 key business problems**, ranging from **simple counts 
 
 ---
 
-## 🟡 Medium to Hard (8 Questions)
+## 🟡 Medium to Hard 
 11. How many warranty claims were filed in 2020?  
 12. Identify each store's best-selling day based on highest quantity sold.  
 13. Identify the least selling product per country per year.  
@@ -56,7 +56,7 @@ This project tackles **23 key business problems**, ranging from **simple counts 
 
 ---
 
-## 🔴 Complex & Advanced (5 Questions)
+## 🔴 Complex & Advanced 
 19. Analyze each store's year-over-year growth ratio.  
 20. Calculate the correlation between product price and warranty claims.  
 21. Identify the store with the highest percentage of "Paid Repaired" claims.  
