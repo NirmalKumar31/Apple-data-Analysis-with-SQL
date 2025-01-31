@@ -34,7 +34,7 @@ CREATE INDEX idx_products_launch ON products(launch_date);
 
 ---
 
-📊 Business Insights & Key Findings
+## **📊 Business Insights & Key Findings**
 🔹 Insight 1: Warranty Claims Are Highest for Low & Mid-Priced Products
 Less expensive products (< $500) have the most warranty claims (13,292 claims).
 Mid-priced products ($500 - $1500) come next with 12,721 claims.
