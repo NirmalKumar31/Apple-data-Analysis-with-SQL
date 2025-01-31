@@ -32,7 +32,7 @@ CREATE INDEX idx_sales_store_product ON sales(store_id, product_id);
 CREATE INDEX idx_warranty_claim_date ON warranty(claim_date);
 CREATE INDEX idx_products_launch ON products(launch_date);
 **` ``` `**
-
+**`# 📊 Business Problems & Solutions`**
 📊 Business Problems & Solutions
 This project tackles 23 key business problems, ranging from simple counts and aggregations to advanced correlation analysis and time-based comparisons.
 
