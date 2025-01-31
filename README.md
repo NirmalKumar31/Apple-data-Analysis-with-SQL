@@ -32,85 +32,41 @@ CREATE INDEX idx_sales_store_product ON sales(store_id, product_id);
 CREATE INDEX idx_warranty_claim_date ON warranty(claim_date);
 CREATE INDEX idx_products_launch ON products(launch_date);
 ```
-
 # 📊 Business Problems & Solutions  
 This project tackles **23 key business problems**, ranging from **simple counts and aggregations** to **advanced correlation analysis and time-based comparisons**.
 
 ## 🟢 Easy to Medium (10 Questions)
-### **1. Find the number of stores in each country.**  
-**Solution:** Group the stores based on their location and count them.  
-
-### **2. Calculate the total number of units sold by each store.**  
-**Solution:** Join the sales and store tables to sum up the quantities sold per store.  
-
-### **3. Identify how many sales occurred in December 2023.**  
-**Solution:** Filter sales data to select transactions from December 2023.  
-
-### **4. Determine how many stores have never had a warranty claim.**  
-**Solution:** Identify stores with no related warranty claims using NOT IN or anti-joins.  
-
-### **5. Count the number of stores with warranty void claims.**  
-**Solution:** Join the sales and warranty tables to count stores with "Warranty Void" claims.  
-
-### **6. Calculate the percentage of warranty claims marked as "Warranty Void."**  
-**Solution:** Find the ratio of "Warranty Void" claims to total claims.  
-
-### **7. Identify which store had the highest total units sold in the last 2 years.**  
-**Solution:** Rank stores by units sold over the last two years.  
-
-### **8. Count the number of unique products sold in the last year.**  
-**Solution:** Count distinct product identifiers in sales data from the past year.  
-
-### **9. Find the unique products and their sales in the last year.**  
-**Solution:** Group sales by product to get total sales per product.  
-
-### **10. Calculate the average price of products in each category.**  
-**Solution:** Join products and categories, then compute the average product price.  
+1. Find the number of stores in each country.  
+2. Calculate the total number of units sold by each store.  
+3. Identify how many sales occurred in December 2023.  
+4. Determine how many stores have never had a warranty claim.  
+5. Count the number of stores with warranty void claims.  
+6. Calculate the percentage of warranty claims marked as "Warranty Void."  
+7. Identify which store had the highest total units sold in the last 2 years.  
+8. Count the number of unique products sold in the last year.  
+9. Find the unique products and their sales in the last year.  
+10. Calculate the average price of products in each category.  
 
 ---
 
 ## 🟡 Medium to Hard (8 Questions)
-### **11. How many warranty claims were filed in 2020?**  
-**Solution:** Filter warranty claims for the year 2020 and count the entries.  
-
-### **12. Identify each store's best-selling day based on highest quantity sold.**  
-**Solution:** Extract the weekday from the sale date and rank them.  
-
-### **13. Identify the least selling product per country per year.**  
-**Solution:** Use ranking functions to find the lowest-selling products.  
-
-### **14. Calculate how many warranty claims were filed within 180 days of a product sale.**  
-**Solution:** Compute the date difference and filter claims.  
-
-### **15. Identify warranty claims for products launched in the last three years.**  
-**Solution:** Join sales and warranty data to count claims for new products.  
-
-### **16. List months in the last three years where sales exceeded 5000 units in the USA.**  
-**Solution:** Apply a HAVING clause on grouped sales data.  
-
-### **17. Identify the product category with the most warranty claims in the last two years.**  
-**Solution:** Rank product categories based on total claims.  
-
-### **18. Determine the percentage chance of receiving claims after each purchase for each country.**  
-**Solution:** Compute the ratio of claims to total sales.  
+11. How many warranty claims were filed in 2020?  
+12. Identify each store's best-selling day based on highest quantity sold.  
+13. Identify the least selling product per country per year.  
+14. Calculate how many warranty claims were filed within 180 days of a product sale.  
+15. Identify warranty claims for products launched in the last three years.  
+16. List months in the last three years where sales exceeded 5000 units in the USA.  
+17. Identify the product category with the most warranty claims in the last two years.  
+18. Determine the percentage chance of receiving claims after each purchase for each country.  
 
 ---
 
 ## 🔴 Complex & Advanced (5 Questions)
-### **19. Analyze each store's year-over-year growth ratio.**  
-**Solution:** Use window functions to calculate yearly growth.  
-
-### **20. Calculate the correlation between product price and warranty claims.**  
-**Solution:** Group products into price segments and count claims.  
-
-### **21. Identify the store with the highest percentage of "Paid Repaired" claims.**  
-**Solution:** Compute and rank the claim ratio per store.  
-
-### **22. Calculate the monthly running total of sales for each store over the past four years.**  
-**Solution:** Track sales trends over time.  
-
-### **23. Analyze product sales trends over different time periods.**  
-**Solution:** Segment products into key time periods and evaluate performance.  
+19. Analyze each store's year-over-year growth ratio.  
+20. Calculate the correlation between product price and warranty claims.  
+21. Identify the store with the highest percentage of "Paid Repaired" claims.  
+22. Calculate the monthly running total of sales for each store over the past four years.  
+23. Analyze product sales trends over different time periods.  
 
 ---
 
@@ -129,4 +85,115 @@ This project tackles **23 key business problems**, ranging from **simple counts 
 - **Older products like "iPhone X" continue selling well beyond 18 months (61,561 units).**
 - **Sales of Apple products decline as they age past 12-18 months.**
 - **Conclusion:** New product launches drive the majority of sales, but some older models continue to perform well.
+
+---
+
+# 🚀 **SQL Query Optimization & Performance Tuning**  
+
+## ✅ **Optimization by Query Refactoring**
+**Before Optimization:**  
+- **Used multiple CTEs**, resulting in **redundant table scans** and **longer execution time (688ms).**
+```sql
+WITH paid_repair AS (
+    SELECT st.store_name, COUNT(w.claim_id) AS total_paid_repaired
+    FROM warranty w 
+    LEFT JOIN sales s ON w.sale_id = s.sale_id
+    JOIN stores st ON st.store_id = s.store_id
+    WHERE w.repair_status = 'Paid Repaired'
+    GROUP BY 1
+),
+total_repair AS (
+    SELECT st.store_name, COUNT(w.claim_id) AS total_claims
+    FROM warranty w 
+    LEFT JOIN sales s ON w.sale_id = s.sale_id
+    JOIN stores st ON st.store_id = s.store_id
+    GROUP BY 1
+)
+SELECT tr.store_name, pr.total_paid_repaired, tr.total_claims,
+       ROUND(pr.total_paid_repaired / tr.total_claims::NUMERIC * 100,2) || '%' AS paid_repair_percent
+FROM paid_repair pr
+JOIN total_repair tr ON pr.store_name = tr.store_name; 
+```
+**Optimized Approach:**  
+- **Merged CTEs** into a **single query**, eliminating redundant scans, improving performance by **54% (316ms).**  
+```sql
+WITH repair_count AS (
+    SELECT st.store_name, 
+           COUNT(w.claim_id) FILTER (WHERE w.repair_status = 'Paid Repaired') AS total_paid_repaired,
+           COUNT(w.claim_id) AS total_claims
+    FROM warranty w 
+    LEFT JOIN sales s ON w.sale_id = s.sale_id
+    JOIN stores st ON st.store_id = s.store_id
+    GROUP BY 1
+)
+SELECT store_name, total_paid_repaired, total_claims,
+       ROUND(total_paid_repaired / total_claims::NUMERIC * 100,2) || '%' AS paid_repair_percent
+FROM repair_count
+WHERE total_paid_repaired > 0;
+```
+
+## ✅ **Optimization by Indexing**
+### **Before Indexing (Slow Query Execution)**
+- Query execution time: **266.3ms**
+- No indexes on frequently filtered columns (e.g., `product_id`, `sale_date`)
+
+```sql
+EXPLAIN ANALYZE
+SELECT * FROM sales
+WHERE product_id = 'P-44';
+
+```
+
+
+### **After Indexing (Optimized Performance)**
+- **Created indexes** on `sales(product_id)`, `sales(store_id)`, `sales(sale_date)`, `warranty(claim_date)`, and `products(launch_date)`.
+- Execution time reduced from **266.3ms to ~2.73ms - 3.7ms** (significant improvement).
+
+```sql
+CREATE INDEX idx_sales_product ON sales(product_id);
+CREATE INDEX idx_sales_store ON sales(store_id);
+CREATE INDEX idx_sales_date ON sales(sale_date);
+CREATE INDEX idx_warranty_claim_date ON warranty(claim_date);
+CREATE INDEX idx_products_launch ON products(launch_date);
+
+EXPLAIN ANALYZE
+SELECT * FROM sales
+WHERE product_id = 'P-44';
+```
+---
+
+### ✅ **Indexes Added for Performance Boost**
+- `idx_sales_date` → Speeds up **date-based queries**.  
+- `idx_sales_store_product` → Optimizes **store-product lookups**.  
+- `idx_warranty_claim_date` → Enhances **warranty claim analysis**.  
+- `idx_products_launch` → Helps in **product lifecycle tracking**.  
+
+**Impact:**  
+- **Faster query execution (Up to 95% improvement).**  
+- **Optimized joins and aggregations.**  
+- **Better handling of large datasets (~1M+ rows).**  
+
+
+
+## 📎 How to Use This Repository  
+
+🔹 **Clone this repo:**  
+```bash
+git clone https://github.com/yourusername/apple-retail-sales-sql.git
+```
+🔹 **Run SQL queries using PostgreSQL (pgAdmin, DBeaver, etc.)**  
+🔹 **Check the Business_Problems_Solutions/ folder for detailed SQL queries.**  
+
+---
+
+## ⭐ Contribute & Connect  
+
+💡 **If you find this useful, star ⭐ this repo!**  
+
+🔗 **LinkedIn:** [https://www.linkedin.com/in/nirmalkumartk/]  
+🔗 **GitHub:** [Your GitHub Profile]  
+
+
+
+
 
