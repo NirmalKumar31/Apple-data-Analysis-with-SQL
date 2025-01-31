@@ -168,13 +168,13 @@ WHERE product_id = 'P-44';
 - **Optimized joins and aggregations.**  
 - **Better handling of large datasets (~1M+ rows).**  
 
-
+---
 
 ## 📎 How to Use This Repository  
 
 🔹 **Clone this repo:**  
 ```bash
-git clone https://github.com/yourusername/apple-retail-sales-sql.git
+git clone https://github.com/NirmalKumar31/Apple-data-Analysis-with-SQL.git
 ```
 🔹 **Run SQL queries using PostgreSQL (pgAdmin, DBeaver, etc.)**  
 🔹 **Check the Business_Problems_Solutions/ folder for detailed SQL queries.**  
