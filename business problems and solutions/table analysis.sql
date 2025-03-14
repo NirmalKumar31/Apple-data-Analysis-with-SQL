@@ -26,6 +26,7 @@ create index sales_sale_date on sales(sale_date);
 create index idx_sales_store_product on sales(store_id, product_id);
 create index idx_warranty_claim_date on warranty(claim_date);
 create index idx_products_launch on products(launch_date);
+create index idx_products_name on products(product_name);
 
 
  
